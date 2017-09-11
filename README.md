@@ -9,7 +9,8 @@ Which was, itself, more or less a stripped down and leaner version of the pyethr
 
 ## Installation
 You'll need to first install pyethereum (I think? I actually have not tested without having pyethereum installed), which is best done through pip:
-'#pip install ethereum'
+
+`$sudo pip install ethereum`
 
 
 ## Usage
