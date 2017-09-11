@@ -4,7 +4,7 @@ import json
 import itertools
 import sys
 
-script, password_spec, wallet = argv
+script, wallet = argv
 
 f = open(wallet) # the json account file from keystore, here renamed
 jsondata=json.load(f)
