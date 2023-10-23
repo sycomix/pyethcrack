@@ -120,14 +120,14 @@ if scrypt is not None:
 def make_keystore_json(priv, pw, kdf="pbkdf2", cipher="aes-128-ctr"):
     # Get the hash function and default parameters
     if kdf not in kdfs:
-        raise Exception("Hash algo %s not supported" % kdf)
+        raise Exception(f"Hash algo {kdf} not supported")
     kdfeval = kdfs[kdf]["calc"]
     kdfparams = kdfs[kdf]["mkparams"]()
     # Compute derived key
     derivedkey = kdfeval(pw, kdfparams)
     # Get the cipher and default parameters
     if cipher not in ciphers:
-        raise Exception("Encryption algo %s not supported" % cipher)
+        raise Exception(f"Encryption algo {cipher} not supported")
     encrypt = ciphers[cipher]["encrypt"]
     cipherparams = ciphers[cipher]["mkparams"]()
     # Produce the encryption key and encrypt
@@ -175,11 +175,7 @@ def check_keystore_json(jsondata):
         return False
     if 'ciphertext' not in crypto:
         return False
-    if 'kdf' not in crypto:
-        return False
-    if 'mac' not in crypto:
-        return False
-    return True
+    return False if 'kdf' not in crypto else 'mac' in crypto
 
 
 def decode_keystore_json(jsondata, pw):
@@ -192,14 +188,14 @@ def decode_keystore_json(jsondata, pw):
         raise Exception("JSON data must contain \"crypto\" object")
     kdfparams = cryptdata["kdfparams"]
     kdf = cryptdata["kdf"]
-    if cryptdata["kdf"] not in kdfs:
-        raise Exception("Hash algo %s not supported" % kdf)
+    if kdf not in kdfs:
+        raise Exception(f"Hash algo {kdf} not supported")
     kdfeval = kdfs[kdf]["calc"]
     # Get cipher and parameters
     cipherparams = cryptdata["cipherparams"]
     cipher = cryptdata["cipher"]
-    if cryptdata["cipher"] not in ciphers:
-        raise Exception("Encryption algo %s not supported" % cipher)
+    if cipher not in ciphers:
+        raise Exception(f"Encryption algo {cipher} not supported")
     decrypt = ciphers[cipher]["decrypt"]
     # Compute the derived key
     derivedkey = kdfeval(pw, kdfparams)
@@ -237,8 +233,7 @@ if sys.version_info.major == 2:
         while value > 0:
             cs.append(chr(value % 256))
             value /= 256
-        s = ''.join(reversed(cs))
-        return s
+        return ''.join(reversed(cs))
 
     def big_endian_to_int(value):
         if len(value) == 1:

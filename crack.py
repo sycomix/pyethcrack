@@ -21,8 +21,7 @@ pwds=[]
 def generate_all(el, tr): #taken from pyethrecover
     if el:
         for j in xrange(len(el[0])):
-            for w in generate_all(el[1:], tr + el[0][j]):
-                yield w
+            yield from generate_all(el[1:], tr + el[0][j])
     else:
         yield tr
 
